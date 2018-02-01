@@ -19,7 +19,9 @@ grid = [].concat.apply([], grid.map((e, i) => i % 5 ? [] : [grid.slice(i, i + 5)
 const init = {
     table: grid.shuffle(),
     next: 1,
-    finish: false
+    finish: false,
+    start: 0,
+    end: 0
 }
 
 
@@ -27,7 +29,10 @@ export default function reducer(state = init, action) {
     if (action.type === 'CLICK_BUTTON') {
         var result
         var nextItem
+        var start
+        var end
         var finish = false
+
 
         for (let i = 0; i < state.table.length; i++) {
             let row = state.table[i]
@@ -38,15 +43,26 @@ export default function reducer(state = init, action) {
         if (result.id === state.next) {
             result.enabled = false
             nextItem = state.next + 1
+            if (state.start === 0) {
+                start = new Date().getTime()
+                result.checkpoint = state.start
+            } else {
+                start = state.start
+                result.checkpoint = (new Date().getTime() - state.start) / 1000
+            }
         }
 
-        if (action.payload.id === 25)
+        if (action.payload.id === 25) {
             finish = true
+            end = (new Date().getTime() - state.start) / 1000
+        }
 
         return {
             table: [...state.table],
             next: nextItem || state.next,
-            finish
+            start: start,
+            end: end || 0,
+            finish: finish
         }
     }
 

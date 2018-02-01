@@ -16,7 +16,15 @@ var config = {
             loader: "babel-loader",
             query: {
                 presets: ["react", "es2015", "stage-2"]
-            }
+            },
+        }, {
+            test: /\.s[ac]ss$/,
+            include: SRC_DIR,
+            loaders: [
+                require.resolve('style-loader'),
+                require.resolve('css-loader'),
+                require.resolve('sass-loader')
+            ]
         }]
     },
     resolve: {
