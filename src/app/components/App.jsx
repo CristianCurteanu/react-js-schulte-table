@@ -1,46 +1,37 @@
 import React from 'react'
 import { render } from 'react-dom';
 import { connect } from 'react-redux'
-import Cell from './Cell.jsx'
-import storage from '../helpers/database.js'
+import RowMapper from './RowMapper.jsx'
+import Navbar from './Navbar.jsx'
+import SuccessMessage from './SuccessMessage.jsx'
+import Statistics from './Statistics.jsx'
 import '../styles/index.scss'
 
 class App extends React.Component {
   render() {
     var content
+    var navbar
 
     if (this.props.state.finish) {
-      var trx = storage.result.transaction('statistics', 'readwrite')
-      var store = trx.objectStore('statistics')
-
-      store.add({
-        timestamp: new Date().getTime(),
-        result: this.props.state.end
-      })
-
-      trx.oncomplete = () => {
-        storage.result.close()
-      }
-
-      content = <p>
-        Success!!! You have completed by { this.props.state.end } seconds
-      </p>
+      content = <SuccessMessage state={this.props.state} />
+      navbar = <Navbar />
     } else {
-      content = <div>
-        <p>Next: { this.props.state.next } </p>
-        {this.props.grid.map((row, index) =>
-          <div className="row">
-            { row.map((cell, index) => <Cell id={cell.id} enabled={cell.enabled} />) }
-          </div>
-        )}
-      </div>
+      content = <RowMapper grid={this.props.grid} next={this.props.state.next} />
     }
     return (
       <div className="container">
-        <div className="row">
-          Schulte Table
+        { navbar }
+        <div className="tab-content">
+          <div className="tab-pane active" id="home" role="tabpanel">
+            { content }
+          </div>
+          <div className="tab-pane" id="stats" role="tabpanel">
+            { <Statistics /> }
+          </div>
+          <div className="tab-pane" id="settings" role="tabpanel">
+            Settings component
+          </div>
         </div>
-        { content }
       </div>
     )
   }

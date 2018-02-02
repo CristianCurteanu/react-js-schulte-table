@@ -1,5 +1,3 @@
-var grid = []
-
 Array.prototype.shuffle = function() {
     var arr = this
     for (let i = arr.length - 1; i > 0; i--) {
@@ -9,12 +7,20 @@ Array.prototype.shuffle = function() {
     return arr
 }
 
-for (let i = 1; i <= 25; i++) {
-    grid[i - 1] = { id: i, enabled: true }
+const generateGrid = () => {
+    let arr = []
+
+    for (let i = 1; i <= 25; i++) {
+        arr[i - 1] = { id: i, enabled: true }
+    }
+
+    arr = arr.shuffle()
+    arr = [].concat.apply([], arr.map((e, i) => i % 5 ? [] : [arr.slice(i, i + 5)]))
+    arr[2][2]['centre'] = true
+    return arr
 }
 
-grid = grid.shuffle()
-grid = [].concat.apply([], grid.map((e, i) => i % 5 ? [] : [grid.slice(i, i + 5)]))
+var grid = generateGrid()
 
 const init = {
     table: grid.shuffle(),
@@ -61,7 +67,7 @@ export default function reducer(state = init, action) {
             table: [...state.table],
             next: nextItem || state.next,
             start: start,
-            end: end || 0,
+            end: end,
             finish: finish
         }
     }
