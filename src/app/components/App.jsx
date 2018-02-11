@@ -16,6 +16,7 @@ class App extends React.Component {
       content = <SuccessMessage state={this.props.state} />
       navbar = <Navbar />
     } else {
+      console.log(this.props.grid)
       content = <RowMapper grid={this.props.grid} next={this.props.state.next} />
     }
     return (

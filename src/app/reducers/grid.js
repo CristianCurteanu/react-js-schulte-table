@@ -1,29 +1,17 @@
-Array.prototype.shuffle = function() {
-    var arr = this
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr
-}
+import grid from '../helpers/grid_gen'
+import configs from '../helpers/game_configs'
 
-const generateGrid = () => {
-    let arr = []
+var size = 0
 
-    for (let i = 1; i <= 25; i++) {
-        arr[i - 1] = { id: i, enabled: true }
-    }
-
-    arr = arr.shuffle()
-    arr = [].concat.apply([], arr.map((e, i) => i % 5 ? [] : [arr.slice(i, i + 5)]))
-    arr[2][2]['centre'] = true
-    return arr
-}
-
-var grid = generateGrid()
+// if (localStorage.getItem('tableSize') === null) {
+//     size = 5
+//     localStorage.setItem('tableSize', size)
+// } else {
+//     size = parseInt(localStorage.getItem('tableSize'))
+// }
 
 const init = {
-    table: grid.shuffle(),
+    table: grid(size),
     next: 1,
     finish: false,
     start: 0,
@@ -58,7 +46,7 @@ export default function reducer(state = init, action) {
             }
         }
 
-        if (action.payload.id === 25) {
+        if (action.payload.id === (size * size)) {
             finish = true
             end = (new Date().getTime() - state.start) / 1000
         }

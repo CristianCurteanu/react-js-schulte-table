@@ -6,7 +6,7 @@ export default class RowMapper extends React.Component {
   render() {
     var rows = this.props.grid.map((row, index) =>
       <div className="row">
-        { row.map((cell, index) => <Cell id={cell.id} enabled={cell.enabled} />) }
+        { row.map((cell, index) => <Cell id={cell.id} enabled={cell.enabled} center={cell.center || false}/>) }
       </div>
     )
     return (
