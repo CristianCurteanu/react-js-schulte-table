@@ -12,7 +12,8 @@ class Cell extends React.Component {
   }
 
   classList(enabled) {
-    return "col-sm-2 btn " + (enabled ? "btn-primary" : "disabled")
+    console.log(this.props)
+    return "col-sm-2 btn " + (enabled ? "btn-primary" : "disabled") + (this.props.center ? " center" : '')
   }
 
   clickButton() {
